@@ -1,0 +1,12 @@
+target
+.snfoundry_cache/
+*/target
+*/.idea
+*/.env
+*/.snfoundry_cache/
+*/build
+*/out
+*/node_modules
+*/dist
+*/.protostar_cache
+*/.vscode
