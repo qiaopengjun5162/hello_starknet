@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.lcov - src/simple_storage.cairo</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../index.html" title="Click to go to top-level">top level</a> - <a href="index.html" title="Click to go to directory src">src</a> - simple_storage.cairo<span style="font-size: 80%;"> (source / <a href="simple_storage.cairo.func-c.html" title="Click to go to function table">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.lcov</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">14</td>
+            <td class="headerCovTableEntry">14</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2024-09-30 22:15:15</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">7</td>
+            <td class="headerCovTableEntry">7</td>
+          </tr>
+                  <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">            Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>              : // Interface definition for SimpleStorage contract</span>
+<span id="L2"><span class="lineNum">       2</span>              : #[starknet::interface]</span>
+<span id="L3"><span class="lineNum">       3</span>              : pub trait ISimpleStorage&lt;TContractState&gt; {</span>
+<span id="L4"><span class="lineNum">       4</span>              :     // Function to get the stored data</span>
+<span id="L5"><span class="lineNum">       5</span>              :     fn get_data(self: @TContractState) -&gt; u128;</span>
+<span id="L6"><span class="lineNum">       6</span>              :     // Function to set new data</span>
+<span id="L7"><span class="lineNum">       7</span>              :     fn set_data(ref self: TContractState, new_value: u128);</span>
+<span id="L8"><span class="lineNum">       8</span>              :     // Function to get the owner address</span>
+<span id="L9"><span class="lineNum">       9</span>              :     fn get_owner(self: @TContractState) -&gt; starknet::ContractAddress;</span>
+<span id="L10"><span class="lineNum">      10</span>              : }</span>
+<span id="L11"><span class="lineNum">      11</span>              : </span>
+<span id="L12"><span class="lineNum">      12</span>              : // SimpleStorage contract implementation</span>
+<span id="L13"><span class="lineNum">      13</span>              : #[starknet::contract]</span>
+<span id="L14"><span class="lineNum">      14</span>              : mod SimpleStorage {</span>
+<span id="L15"><span class="lineNum">      15</span>              :     use starknet::{ContractAddress, get_caller_address};</span>
+<span id="L16"><span class="lineNum">      16</span>              : </span>
+<span id="L17"><span class="lineNum">      17</span>              :     // Storage structure definition</span>
+<span id="L18"><span class="lineNum">      18</span>              :     #[storage]</span>
+<span id="L19"><span class="lineNum">      19</span>              :     struct Storage {</span>
+<span id="L20"><span class="lineNum">      20</span>              :         data: u128,</span>
+<span id="L21"><span class="lineNum">      21</span> <span class="tlaGNC tlaBgGNC">           4 :         owner: ContractAddress,</span></span>
+<span id="L22"><span class="lineNum">      22</span>              :     }</span>
+<span id="L23"><span class="lineNum">      23</span> <span class="tlaGNC">          16 : </span></span>
+<span id="L24"><span class="lineNum">      24</span>              :     // Constructor function</span>
+<span id="L25"><span class="lineNum">      25</span>              :     #[constructor]</span>
+<span id="L26"><span class="lineNum">      26</span> <span class="tlaGNC">           5 :     fn constructor(ref self: ContractState, initial_data: u128, owner: ContractAddress) {</span></span>
+<span id="L27"><span class="lineNum">      27</span>              :         // Initialize data with the provided initial_data</span>
+<span id="L28"><span class="lineNum">      28</span> <span class="tlaGNC">          20 :         self.data.write(initial_data);</span></span>
+<span id="L29"><span class="lineNum">      29</span>              :         // Set the owner to the provided owner address</span>
+<span id="L30"><span class="lineNum">      30</span> <span class="tlaGNC">          20 :         self.owner.write(owner);</span></span>
+<span id="L31"><span class="lineNum">      31</span> <span class="tlaGNC">          28 :     }</span></span>
+<span id="L32"><span class="lineNum">      32</span>              : </span>
+<span id="L33"><span class="lineNum">      33</span>              :     // Implementation of the ISimpleStorage interface</span>
+<span id="L34"><span class="lineNum">      34</span>              :     #[abi(embed_v0)]</span>
+<span id="L35"><span class="lineNum">      35</span> <span class="tlaGNC">           6 :     impl SimpleStorageImpl of super::ISimpleStorage&lt;ContractState&gt; {</span></span>
+<span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">          24 :         // Function to retrieve the stored data</span></span>
+<span id="L37"><span class="lineNum">      37</span>              :         fn get_data(self: @ContractState) -&gt; u128 {</span>
+<span id="L38"><span class="lineNum">      38</span> <span class="tlaGNC">          32 :             self.data.read()</span></span>
+<span id="L39"><span class="lineNum">      39</span>              :         }</span>
+<span id="L40"><span class="lineNum">      40</span>              : </span>
+<span id="L41"><span class="lineNum">      41</span>              :         // Function to update the stored data</span>
+<span id="L42"><span class="lineNum">      42</span> <span class="tlaGNC">           5 :         fn set_data(ref self: ContractState, new_value: u128) {</span></span>
+<span id="L43"><span class="lineNum">      43</span>              :             // Check if the caller is the owner</span>
+<span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">          10 :             let caller = get_caller_address();</span></span>
+<span id="L45"><span class="lineNum">      45</span> <span class="tlaGNC">          20 :             assert(caller == self.owner.read(), 'Only the owner can set data');</span></span>
+<span id="L46"><span class="lineNum">      46</span> <span class="tlaGNC">          20 :             self.data.write(new_value);</span></span>
+<span id="L47"><span class="lineNum">      47</span>              :         }</span>
+<span id="L48"><span class="lineNum">      48</span>              : </span>
+<span id="L49"><span class="lineNum">      49</span>              :         // Function to get the owner address</span>
+<span id="L50"><span class="lineNum">      50</span>              :         fn get_owner(self: @ContractState) -&gt; ContractAddress {</span>
+<span id="L51"><span class="lineNum">      51</span> <span class="tlaGNC">           4 :             self.owner.read()</span></span>
+<span id="L52"><span class="lineNum">      52</span>              :         }</span>
+<span id="L53"><span class="lineNum">      53</span>              :     }</span>
+<span id="L54"><span class="lineNum">      54</span>              : }</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.1-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>
