@@ -9,7 +9,7 @@ pub trait IOwnableCounter<TContractState> {
 mod OwnableCounter {
     use super::IOwnableCounter;
     use ownable_component::PrivateTrait;
-    use core::starknet::{ContractAddress, get_caller_address};
+    use core::starknet::{ContractAddress};
     use intro_to_components::ownable_component::ownable_component::ownable_component;
     use core::starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess};
 

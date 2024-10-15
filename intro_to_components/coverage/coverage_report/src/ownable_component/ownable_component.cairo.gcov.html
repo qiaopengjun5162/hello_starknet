@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.lcov - src/ownable_component/ownable_component.cairo</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../../index.html" title="Click to go to top-level">top level</a> - <a href="index.html" title="Click to go to directory src/ownable_component">src/ownable_component</a> - ownable_component.cairo<span style="font-size: 80%;"> (source / <a href="ownable_component.cairo.func-c.html" title="Click to go to function table">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.lcov</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">14</td>
+            <td class="headerCovTableEntry">14</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2024-10-15 23:01:31</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntry">6</td>
+          </tr>
+                  <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">            Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>              : use core::starknet::ContractAddress;</span>
+<span id="L2"><span class="lineNum">       2</span>              : </span>
+<span id="L3"><span class="lineNum">       3</span>              : #[starknet::interface]</span>
+<span id="L4"><span class="lineNum">       4</span>              : pub trait IOwnable&lt;TContractState&gt; {</span>
+<span id="L5"><span class="lineNum">       5</span>              :     fn owner(self: @TContractState) -&gt; ContractAddress;</span>
+<span id="L6"><span class="lineNum">       6</span>              :     fn transfer_ownership(ref self: TContractState, new_owner: ContractAddress);</span>
+<span id="L7"><span class="lineNum">       7</span>              :     fn renounce_ownership(ref self: TContractState);</span>
+<span id="L8"><span class="lineNum">       8</span>              : }</span>
+<span id="L9"><span class="lineNum">       9</span>              : </span>
+<span id="L10"><span class="lineNum">      10</span>              : mod Errors {</span>
+<span id="L11"><span class="lineNum">      11</span>              :     pub const ZERO_ADDRESS_OWNER: felt252 = 'Owner cannot be address zero';</span>
+<span id="L12"><span class="lineNum">      12</span>              :     pub const ZERO_ADDRESS_CALLER: felt252 = 'Caller cannot be address zero';</span>
+<span id="L13"><span class="lineNum">      13</span>              :     pub const NOT_OWNER: felt252 = 'Caller not owner';</span>
+<span id="L14"><span class="lineNum">      14</span>              : }</span>
+<span id="L15"><span class="lineNum">      15</span>              : </span>
+<span id="L16"><span class="lineNum">      16</span>              : #[starknet::component]</span>
+<span id="L17"><span class="lineNum">      17</span>              : pub mod ownable_component {</span>
+<span id="L18"><span class="lineNum">      18</span>              :     use core::num::traits::Zero;</span>
+<span id="L19"><span class="lineNum">      19</span>              :     use core::starknet::{ContractAddress, get_caller_address};</span>
+<span id="L20"><span class="lineNum">      20</span>              :     use core::starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess};</span>
+<span id="L21"><span class="lineNum">      21</span>              :     use super::Errors;</span>
+<span id="L22"><span class="lineNum">      22</span>              : </span>
+<span id="L23"><span class="lineNum">      23</span>              :     #[storage]</span>
+<span id="L24"><span class="lineNum">      24</span>              :     pub struct Storage {</span>
+<span id="L25"><span class="lineNum">      25</span>              :         owner: ContractAddress,</span>
+<span id="L26"><span class="lineNum">      26</span>              :         caller: ContractAddress</span>
+<span id="L27"><span class="lineNum">      27</span>              :     }</span>
+<span id="L28"><span class="lineNum">      28</span>              : </span>
+<span id="L29"><span class="lineNum">      29</span>              :     #[event]</span>
+<span id="L30"><span class="lineNum">      30</span>              :     #[derive(Drop, starknet::Event)]</span>
+<span id="L31"><span class="lineNum">      31</span>              :     pub enum Event {</span>
+<span id="L32"><span class="lineNum">      32</span>              :         OwnershipTransferred: OwnershipTransferred</span>
+<span id="L33"><span class="lineNum">      33</span>              :     }</span>
+<span id="L34"><span class="lineNum">      34</span>              : </span>
+<span id="L35"><span class="lineNum">      35</span>              :     #[derive(Drop, starknet::Event)]</span>
+<span id="L36"><span class="lineNum">      36</span>              :     struct OwnershipTransferred {</span>
+<span id="L37"><span class="lineNum">      37</span>              :         previous_owner: ContractAddress,</span>
+<span id="L38"><span class="lineNum">      38</span>              :         new_owner: ContractAddress,</span>
+<span id="L39"><span class="lineNum">      39</span>              :     }</span>
+<span id="L40"><span class="lineNum">      40</span>              : </span>
+<span id="L41"><span class="lineNum">      41</span>              :     #[embeddable_as(Ownable)]</span>
+<span id="L42"><span class="lineNum">      42</span>              :     impl OwnableImpl&lt;</span>
+<span id="L43"><span class="lineNum">      43</span>              :         TContractState, +HasComponent&lt;TContractState&gt;</span>
+<span id="L44"><span class="lineNum">      44</span>              :     &gt; of super::IOwnable&lt;ComponentState&lt;TContractState&gt;&gt; {</span>
+<span id="L45"><span class="lineNum">      45</span>              :         fn owner(self: @ComponentState&lt;TContractState&gt;) -&gt; ContractAddress {</span>
+<span id="L46"><span class="lineNum">      46</span> <span class="tlaGNC tlaBgGNC">          12 :             self.owner.read()</span></span>
+<span id="L47"><span class="lineNum">      47</span>              :         }</span>
+<span id="L48"><span class="lineNum">      48</span>              : </span>
+<span id="L49"><span class="lineNum">      49</span>              :         fn transfer_ownership(</span>
+<span id="L50"><span class="lineNum">      50</span>              :             ref self: ComponentState&lt;TContractState&gt;, new_owner: ContractAddress</span>
+<span id="L51"><span class="lineNum">      51</span>              :         ) {</span>
+<span id="L52"><span class="lineNum">      52</span> <span class="tlaGNC">           2 :             assert(!new_owner.is_zero(), Errors::ZERO_ADDRESS_CALLER);</span></span>
+<span id="L53"><span class="lineNum">      53</span> <span class="tlaGNC">           2 :             self.assert_only_owner();</span></span>
+<span id="L54"><span class="lineNum">      54</span> <span class="tlaGNC">           2 :             self._transfer_ownership(new_owner);</span></span>
+<span id="L55"><span class="lineNum">      55</span>              :         }</span>
+<span id="L56"><span class="lineNum">      56</span>              : </span>
+<span id="L57"><span class="lineNum">      57</span>              :         fn renounce_ownership(ref self: ComponentState&lt;TContractState&gt;) {</span>
+<span id="L58"><span class="lineNum">      58</span> <span class="tlaGNC">           2 :             self.assert_only_owner();</span></span>
+<span id="L59"><span class="lineNum">      59</span> <span class="tlaGNC">           3 :             self._transfer_ownership(Zero::zero());</span></span>
+<span id="L60"><span class="lineNum">      60</span>              :         }</span>
+<span id="L61"><span class="lineNum">      61</span>              :     }</span>
+<span id="L62"><span class="lineNum">      62</span>              : </span>
+<span id="L63"><span class="lineNum">      63</span>              :     #[generate_trait]</span>
+<span id="L64"><span class="lineNum">      64</span>              :     pub impl PrivateImpl&lt;</span>
+<span id="L65"><span class="lineNum">      65</span>              :         TContractState, +HasComponent&lt;TContractState&gt;</span>
+<span id="L66"><span class="lineNum">      66</span>              :     &gt; of PrivateTrait&lt;TContractState&gt; {</span>
+<span id="L67"><span class="lineNum">      67</span>              :         fn initializer(ref self: ComponentState&lt;TContractState&gt;, owner: ContractAddress) {</span>
+<span id="L68"><span class="lineNum">      68</span> <span class="tlaGNC">          18 :             self._transfer_ownership(owner);</span></span>
+<span id="L69"><span class="lineNum">      69</span>              :         }</span>
+<span id="L70"><span class="lineNum">      70</span>              : </span>
+<span id="L71"><span class="lineNum">      71</span>              :         fn assert_only_owner(self: @ComponentState&lt;TContractState&gt;) {</span>
+<span id="L72"><span class="lineNum">      72</span> <span class="tlaGNC">          12 :             let owner: ContractAddress = self.owner.read();</span></span>
+<span id="L73"><span class="lineNum">      73</span> <span class="tlaGNC">           6 :             let caller: ContractAddress = get_caller_address();</span></span>
+<span id="L74"><span class="lineNum">      74</span> <span class="tlaGNC">           6 :             assert(!caller.is_zero(), Errors::ZERO_ADDRESS_CALLER);</span></span>
+<span id="L75"><span class="lineNum">      75</span> <span class="tlaGNC">           3 :             assert(caller == owner, Errors::NOT_OWNER);</span></span>
+<span id="L76"><span class="lineNum">      76</span>              :         }</span>
+<span id="L77"><span class="lineNum">      77</span>              : </span>
+<span id="L78"><span class="lineNum">      78</span>              :         fn _transfer_ownership(</span>
+<span id="L79"><span class="lineNum">      79</span>              :             ref self: ComponentState&lt;TContractState&gt;, new_owner: ContractAddress</span>
+<span id="L80"><span class="lineNum">      80</span>              :         ) {</span>
+<span id="L81"><span class="lineNum">      81</span> <span class="tlaGNC">          44 :             let previous_owner: ContractAddress = self.owner.read();</span></span>
+<span id="L82"><span class="lineNum">      82</span> <span class="tlaGNC">          44 :             self.owner.write(new_owner);</span></span>
+<span id="L83"><span class="lineNum">      83</span> <span class="tlaGNC">          22 :             self</span></span>
+<span id="L84"><span class="lineNum">      84</span>              :                 .emit(</span>
+<span id="L85"><span class="lineNum">      85</span>              :                     OwnershipTransferred { previous_owner: previous_owner, new_owner: new_owner }</span>
+<span id="L86"><span class="lineNum">      86</span>              :                 );</span>
+<span id="L87"><span class="lineNum">      87</span>              :         }</span>
+<span id="L88"><span class="lineNum">      88</span>              :     }</span>
+<span id="L89"><span class="lineNum">      89</span>              : }</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.1-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>

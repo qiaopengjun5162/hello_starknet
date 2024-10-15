@@ -40,6 +40,50 @@ To see deployment details, visit:
 contract: https://sepolia.starkscan.co/contract/0x360d2d92e34e120f3f88ac87e5cdb5cb5e99b2191416a209cc052921bd40ebd
 transaction: https://sepolia.starkscan.co/tx/0x75eb691d86a9b9e31fea51c096f1f9d0fed36d9059048d4453680bd6c542445
 
+asdf local starknet-foundry latest
+redirect url: https://github.com/foundry-rs/starknet-foundry/releases/tag/v0.31.0
+version 0.31.0 is not installed for starknet-foundry
+
+hello_starknet/intro_to_components on  main [!?] via 🅒 base 
+➜ scarb test test_initializer                                                                                   
+     Running test intro_to_components (snforge test)
+   Compiling snforge_scarb_plugin v0.31.0 (git+https://github.com/foundry-rs/starknet-foundry?tag=v0.31.0#72ea785ca354e9e506de3e5d687da9fb2c1b3c67)
+    Finished `release` profile [optimized] target(s) in 0.18s
+   Compiling test(intro_to_components_unittest) intro_to_components v0.1.0 (/Users/qiaopengjun/Code/starknet-code/hello_starknet/intro_to_components/Scarb.toml)
+   Compiling test(intro_to_components_tests) intro_to_components_tests v0.1.0 (/Users/qiaopengjun/Code/starknet-code/hello_starknet/intro_to_components/Scarb.toml)
+    Finished `dev` profile target(s) in 10 seconds
+
+
+Collected 1 test(s) from intro_to_components package
+Running 1 test(s) from tests/
+[PASS] intro_to_components_tests::test_ownable_comp::test_initializer (gas: ~168)
+Running 0 test(s) from src/
+Tests: 1 passed, 0 failed, 0 skipped, 0 ignored, 8 filtered out
+
+hello_starknet/intro_to_components on  main [!?] via 🅒 base took 11.9s 
+➜ scarb test                 
+     Running test intro_to_components (snforge test)
+   Compiling snforge_scarb_plugin v0.31.0 (git+https://github.com/foundry-rs/starknet-foundry?tag=v0.31.0#72ea785ca354e9e506de3e5d687da9fb2c1b3c67)
+    Finished `release` profile [optimized] target(s) in 0.16s
+   Compiling test(intro_to_components_unittest) intro_to_components v0.1.0 (/Users/qiaopengjun/Code/starknet-code/hello_starknet/intro_to_components/Scarb.toml)
+   Compiling test(intro_to_components_tests) intro_to_components_tests v0.1.0 (/Users/qiaopengjun/Code/starknet-code/hello_starknet/intro_to_components/Scarb.toml)
+    Finished `dev` profile target(s) in 10 seconds
+
+
+Collected 9 test(s) from intro_to_components package
+Running 9 test(s) from tests/
+[PASS] intro_to_components_tests::test_ownable_comp::test_initializer (gas: ~168)
+[PASS] intro_to_components_tests::test_ownable_comp::test_renounce_ownership_fail (gas: ~169)
+[PASS] intro_to_components_tests::test_ownable_comp::test_transfer_ownership_not_owner (gas: ~170)
+[PASS] intro_to_components_tests::test_ownable_comp::test_transfer_ownership_address_zero (gas: ~170)
+[PASS] intro_to_components_tests::test_ownable_comp::test_increase_count (gas: ~240)
+[PASS] intro_to_components_tests::test_ownable_comp::test_renounce_ownership_zero (gas: ~169)
+[PASS] intro_to_components_tests::test_ownable_comp::test_increase_count_not_owner (gas: ~172)
+[PASS] intro_to_components_tests::test_ownable_comp::test_renounce_ownership (gas: ~111)
+[PASS] intro_to_components_tests::test_ownable_comp::test_transfer_ownership (gas: ~175)
+Running 0 test(s) from src/
+Tests: 9 passed, 0 failed, 0 skipped, 0 ignored, 0 filtered out
+
 ```
 
 ## 参考
