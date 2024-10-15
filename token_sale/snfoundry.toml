@@ -1,0 +1,4 @@
+[sncast.sepolia_account]
+account = "qiao"
+accounts-file = "/Users/qiaopengjun/.starknet_accounts/starknet_open_zeppelin_accounts.json"
+url = "https://starknet-sepolia.g.alchemy.com/starknet/version/rpc/v0_7/YLgbp9I-spejSR_9EHp_-UYDrIYdrwE1"
